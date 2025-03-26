@@ -1,0 +1,169 @@
+﻿<Window x:Class="NeuroSoft.Alertas"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:local="clr-namespace:NeuroSoft"
+        Title="NeuroSoft - Alertas"
+        Height="680" Width="1300" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Estilo global para los botones redondeados -->
+        <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#6381A8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="50"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+
+        <!-- Menú lateral -->
+        <DockPanel Background="#6381A8" Width="217" HorizontalAlignment="Left">
+            <StackPanel >
+
+                <!-- Logo -->
+                <Image Source="imagenes/logo_neuro.jpg" Width="180" Height="53"
+                       HorizontalAlignment="Center" Margin="10,20,10,30"/>
+
+                <!-- Botones del menú -->
+                <Button Content="🧠    Inicio                " Click=" BtnInicio_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click"  Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content="📊    Resultados       " Click="BtnResultados_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content="⚠️    Alertas             " Foreground="White" Background="#4D6380" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+
+                <!-- Botón Salir -->
+                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="imagenes/exit_icon.jpg" Width="24" Height="24" Margin="0,0,10,0"/>
+                        <TextBlock Text="S A L I R" RenderTransformOrigin="0.561,1.002" Margin="0,5,5,5"/>
+                    </StackPanel>
+                </Button>
+
+                
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Encabezado con perfil de usuario -->
+        <DockPanel Background="#F5F5F5" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
+
+                <!-- Foto de perfil -->
+                <!-- Datos del usuario -->
+                <Image Source="imagenes/perfil_usuario.png" Width="34" Height="34" Margin="0,0,10,0"
+                       ClipToBounds="True" Stretch="Fill"/>
+
+                <!-- Datos del usuario -->
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
+                    <TextBlock Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
+                </StackPanel>
+
+                <!-- Icono de notificaciones -->
+                <Button Content="🔔" Background="Transparent" BorderThickness="0"
+                        FontSize="18" Foreground="#4D6380" Width="40" Height="34" Margin="10,0,20,0"/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Contenido principal -->
+        <Grid Margin="222,57,0,0" Background="White" Height="607" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- FILTROS - PRIMERA FILA -->
+            <StackPanel Orientation="Horizontal" Margin="20,20,20,5" Grid.Row="0">
+                <TextBlock Text="Nombre Paciente:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                <TextBox Width="200" Margin="10,0,30,0" />
+                
+
+                <TextBlock Text=" ID del Archivo:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                <TextBox Width="180" Margin="10,0,30,0"/>
+
+                <!-- BOTÓN DE BÚSQUEDA -->
+                <Button Content="🔍 Buscar" Background="#2980B9" Foreground="White" FontSize="16" Padding="2,4" Width="199" Margin="30,0,5,0" BorderThickness="0,0,0,0"/>
+            </StackPanel>
+
+            <!-- FILTROS - SEGUNDA FILA -->
+            <StackPanel Orientation="Horizontal" Margin="20,5,20,10" Grid.Row="1">
+                <TextBlock Text="Fecha de Reporte:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                <DatePicker Width="200" Margin="10,0,30,0" Height="28"/>
+                
+                <TextBlock Text="Estatus/Estado:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                <ComboBox Width="180" Margin="10,0,30,0">
+                    <ComboBoxItem Content="Poco probable"/>
+                    <ComboBoxItem Content="Probable"/>
+                    <ComboBoxItem Content="Muy probable"/>
+                </ComboBox>
+
+
+            </StackPanel>
+
+            <!-- BOTÓN CREAR CARPETA/ARCHIVO -->
+            <StackPanel Orientation="Horizontal" Margin="10,20,20,10" Grid.Row="2">
+                <!-- Encabezado de Historial de Alertas -->
+                <TextBlock Text="Historial de Alertas" FontSize="23" FontWeight="Bold" Foreground="#2C3E50" Margin="20,20,20,10"/>
+                <Button Content="📂 Crear Carpeta/Archivo" Background="#27AE60" Foreground="White" FontSize="16" Padding="8,5"  Width="198" BorderThickness="0,0,0,0" Margin="490,10,0,10"/>
+            </StackPanel>
+
+
+            <!-- TABLA DE ALERTAS -->
+            <Grid Grid.Row="3" Margin="20,5,20,5">
+                <DataGrid ItemsSource="{Binding ListaAlertas}" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeight="40" Margin="0,0,0,42">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Fecha Reporte" Binding="{Binding FechaReporte}" Width="*" />
+                        <DataGridTextColumn Header="ID Archivo" Binding="{Binding IDArchivo}" Width="*" />
+                        <DataGridTextColumn Header="Paciente" Binding="{Binding NombrePaciente}" Width="*" />
+
+                        <!-- Estado con colores -->
+                        <DataGridTemplateColumn Header="Estado">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="{Binding ColorEstado}" Padding="5" CornerRadius="5">
+                                        <TextBlock Text="{Binding Estado}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- BOTONES DE OPCIONES -->
+                        <DataGridTemplateColumn Header="Opciones">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <!-- BOTÓN VISUALIZAR -->
+                                        <Button Content="👁 Visualizar" Background="#3498DB" Foreground="White" Padding="5" Margin="5,0,0,0" Command="{Binding ComandoVisualizar}"/>
+
+                                        <!-- BOTÓN ELIMINAR -->
+                                        <Button Content="🗑 Eliminar" Background="#E74C3C" Foreground="White" Padding="5" Margin="5,0,0,0" Command="{Binding ComandoEliminar}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+
+
+
+    </Grid>
+</Window>

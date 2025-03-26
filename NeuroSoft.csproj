@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="imagenes\exit_icon.jpg" />
+    <None Remove="imagenes\icono_neuro.jpg" />
+    <None Remove="imagenes\icon_password.jpg" />
+    <None Remove="imagenes\icon_user.jpg" />
+    <None Remove="imagenes\logo.jpg" />
+    <None Remove="imagenes\logo_neuro.jpg" />
+    <None Remove="imagenes\perfil_usuario.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
+    <PackageReference Include="MySql.Data" Version="9.2.0" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="imagenes\exit_icon.jpg" />
+    <Resource Include="imagenes\icono_neuro.jpg" />
+    <Resource Include="imagenes\icon_password.jpg" />
+    <Resource Include="imagenes\icon_user.jpg" />
+    <Resource Include="imagenes\logo.jpg" />
+    <Resource Include="imagenes\logo_neuro.jpg" />
+    <Resource Include="imagenes\perfil_usuario.png" />
+  </ItemGroup>
+
+</Project>
