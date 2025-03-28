@@ -1,66 +1,113 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
+using System.Threading.Tasks;
+using LiveCharts;
+using LiveCharts.Wpf;
+using System.Text.Json;
+using NeuroSoft.Helpers;
+using NeuroSoft.Models;
 
 namespace NeuroSoft
 {
     public partial class Inicio : Window
     {
+        public ChartValues<int> DatosAlertas { get; set; }
+        private UserData CurrentUser { get; set; }
+
         public Inicio()
         {
             InitializeComponent();
-
-            // Iniciar datos de las gráficas
-            DatosAlertas = new LiveCharts.ChartValues<int> { 5, 10, 8 };  // Ejemplo de valores para las alertas
-            // Configurar los datos de la gráfica de alertas
-            IniciarGraficaAlertas();
+            LoadUserData();
+            InitializeCharts();
+            LoadInitialData();
         }
 
-        // Propiedad de datos para la gráfica de alertas
-        public LiveCharts.ChartValues<int> DatosAlertas { get; set; }
-
-        // Método para inicializar la gráfica de alertas
-        private void IniciarGraficaAlertas()
+        private void LoadUserData()
         {
-            // Configuración de la gráfica (si se necesita más detalle)
-        }
-
-        // Evento de clic para el botón "Salir"
-        private void BtnSalir_Click(object sender, RoutedEventArgs e)
-        {
-            var resultado = MessageBox.Show("¿Estás seguro de que quieres salir?", "Salir", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (resultado == MessageBoxResult.Yes)
+            if (Application.Current.Properties.Contains("UserData"))
             {
-                Application.Current.Shutdown();
+                CurrentUser = Application.Current.Properties["UserData"] as UserData;
+                // Actualizar UI con datos del usuario
+                // (Nota: Asegúrate de que los controles lblNombreUsuario y lblEmail existen en tu XAML)
+                // lblNombreUsuario.Text = CurrentUser.nombre_completo;
+                // lblEmail.Text = CurrentUser.email;
+            }
+            else
+            {
+                MessageBox.Show("No se encontraron datos de usuario", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                ReturnToLogin();
             }
         }
 
-        // Evento de clic para el botón "Subir Imágenes"
+        private void InitializeCharts()
+        {
+            // Configuración inicial de gráficos
+            DatosAlertas = new ChartValues<int> { 5, 10, 8, 15, 12 }; // Datos de ejemplo
+
+            // Configuración adicional de gráficos según tu XAML
+            // (Los gráficos ya están configurados en el XAML)
+        }
+
+        private async void LoadInitialData()
+        {
+            try
+            {
+                // Ejemplo: Cargar datos de alertas desde la API
+                var response = await ApiHelper.GetAsync("alertas/ultimas/");
+
+                if (response?.IsSuccessStatusCode == true)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var alertas = JsonSerializer.Deserialize<int[]>(content);
+
+                    DatosAlertas.Clear();
+                    DatosAlertas.AddRange(alertas);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar datos iniciales: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private async void BtnSalir_Click(object sender, RoutedEventArgs e)
+        {
+            var confirmacion = MessageBox.Show("¿Estás seguro que deseas cerrar sesión?", "Confirmar",
+                                            MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (confirmacion == MessageBoxResult.Yes)
+            {
+                await ApiHelper.Logout();
+                ReturnToLogin();
+            }
+        }
+
         private void BtnSubirImagenes_Click(object sender, RoutedEventArgs e)
         {
-            // Crear una nueva instancia de la ventana Subir
-            Subir ventanaSubir = new Subir();
-
-            // Mostrar la ventana de subir imágenes
+            var ventanaSubir = new Subir();
             ventanaSubir.Show();
-
-            // Cerrar la ventana de inicio (si lo deseas)
             this.Close();
         }
 
-        // Evento para el botón "Resultados" en el menú lateral
         private void BtnResultados_Click(object sender, RoutedEventArgs e)
         {
-            Resultados resultadosWindow = new Resultados();
+            var resultadosWindow = new Resultados();
             resultadosWindow.Show();
             this.Close();
         }
 
-        // Evento para el botón "Alertas" en el menú lateral
         private void BtnAlertas_Click(object sender, RoutedEventArgs e)
         {
-            Alertas alertasWindow = new Alertas();
+            var alertasWindow = new Alertas();
             alertasWindow.Show();
             this.Close();
         }
 
+        private void ReturnToLogin()
+        {
+            var loginWindow = new Login();
+            loginWindow.Show();
+            this.Close();
+        }
     }
 }
