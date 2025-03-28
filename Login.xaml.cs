@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Windows;
-using MySql.Data.MySqlClient;
-using System.Security.Cryptography;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using NeuroSoft.Helpers;
+using NeuroSoft.Models;
 
 namespace NeuroSoft
 {
@@ -11,47 +14,74 @@ namespace NeuroSoft
         public Login()
         {
             InitializeComponent();
-            DatabaseHelper.CrearBaseDeDatos(); // Verificar que la BD exista al iniciar
+            CheckExistingSession();
         }
 
-        private void BtnIngresar_Click(object sender, RoutedEventArgs e)
+        private void CheckExistingSession()
         {
-            string usuario = txtUsuario.Text;
-            string password = txtPassword.Password;
-
-            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(password))
+            if (Application.Current.Properties.Contains("JwtToken"))
             {
-                MessageBox.Show("Por favor, ingrese usuario y contraseña.", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            if (ValidarUsuario(usuario, password))
-            {
-                MessageBox.Show("Bienvenido a NeuroSoft", "Acceso concedido", MessageBoxButton.OK, MessageBoxImage.Information);
-                Inicio inicio = new Inicio();
+                var inicio = new Inicio();
                 inicio.Show();
                 this.Close();
             }
-            else
-            {
-                MessageBox.Show("Usuario o contraseña incorrectos", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
 
-        private bool ValidarUsuario(string usuario, string password)
+        private async void BtnIngresar_Click(object sender, RoutedEventArgs e)
         {
-            using (var conn = new MySqlConnection(DatabaseHelper.ConnectionString))
-            {
-                conn.Open();
-                string query = "SELECT COUNT(*) FROM Usuarios WHERE Usuario=@usuario AND Password=SHA2(@password, 256)";
+            string usuario = txtUsuario.Text.Trim();
+            string password = txtPassword.Password;
 
-                using (var cmd = new MySqlCommand(query, conn))
+            // Validación básica
+            if (string.IsNullOrEmpty(usuario) || usuario == "Ingresa tu nombre de usuario")
+            {
+                MessageBox.Show("Por favor ingrese un nombre de usuario válido", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Por favor ingrese su contraseña", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var loginData = new
                 {
-                    cmd.Parameters.AddWithValue("@usuario", usuario);
-                    cmd.Parameters.AddWithValue("@password", password);
-                    int count = Convert.ToInt32(cmd.ExecuteScalar());
-                    return count > 0;
+                    username = usuario,
+                    password = password
+                };
+
+                string json = JsonSerializer.Serialize(loginData);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Usar ApiHelper en lugar de HttpClient directo
+                var response = await ApiHelper.PostAsync("usuarios/login/", loginData);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var loginResponse = JsonSerializer.Deserialize<LoginResponse>(responseContent);
+
+                    // Guardar tokens y datos de usuario
+                    Application.Current.Properties["JwtToken"] = loginResponse.access;
+                    Application.Current.Properties["RefreshToken"] = loginResponse.refresh;
+                    Application.Current.Properties["UserData"] = loginResponse.user;
+
+                    // Mostrar ventana principal
+                    var inicio = new Inicio();
+                    inicio.Show();
+                    this.Close();
                 }
+                else
+                {
+                    MessageBox.Show("Usuario o contraseña incorrectos", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error de conexión: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -60,7 +90,7 @@ namespace NeuroSoft
             if (txtUsuario.Text == "Ingresa tu nombre de usuario")
             {
                 txtUsuario.Text = "";
-                txtUsuario.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Black);
+                txtUsuario.Foreground = System.Windows.Media.Brushes.Black;
             }
         }
 
@@ -69,54 +99,7 @@ namespace NeuroSoft
             if (string.IsNullOrWhiteSpace(txtUsuario.Text))
             {
                 txtUsuario.Text = "Ingresa tu nombre de usuario";
-                txtUsuario.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Gray);
-            }
-        }
-    }
-
-    public static class DatabaseHelper
-    {
-        public static string ConnectionString = "Server=127.0.0.1;Database=NeuroSoftDB;Uid=root;Pwd=;SslMode=none;";
-
-        public static void CrearBaseDeDatos()
-        {
-            try
-            {
-                // Conexión sin base de datos para crearla
-                using (var conn = new MySqlConnection("Server=127.0.0.1;Uid=root;Pwd=;SslMode=none;"))
-                {
-                    conn.Open();
-                    string createDatabaseQuery = "CREATE DATABASE IF NOT EXISTS NeuroSoftDB;";
-                    using (var cmd = new MySqlCommand(createDatabaseQuery, conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                // Ahora conectamos con la base de datos
-                using (var conn = new MySqlConnection(ConnectionString))
-                {
-                    conn.Open();
-                    string sql = @"
-                        CREATE TABLE IF NOT EXISTS Usuarios (
-                            ID INT AUTO_INCREMENT PRIMARY KEY,
-                            Usuario VARCHAR(50) NOT NULL UNIQUE,
-                            Password VARCHAR(64) NOT NULL
-                        );
-
-                        INSERT IGNORE INTO Usuarios (Usuario, Password) VALUES ('admin', SHA2('1234', 256));
-                    ";
-
-                    using (var cmd = new MySqlCommand(sql, conn))
-                    {
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                MessageBox.Show("Base de datos configurada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al configurar la base de datos:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                txtUsuario.Foreground = System.Windows.Media.Brushes.Gray;
             }
         }
     }
