@@ -34,6 +34,7 @@
             <RowDefinition Height="339*"/>
             <RowDefinition Height="325*"/>
         </Grid.RowDefinitions>
+
         <!-- Menú lateral -->
         <DockPanel Background="#6381A8" Width="217" HorizontalAlignment="Left" Grid.RowSpan="2">
             <StackPanel>
@@ -48,7 +49,7 @@
                 <Button Content="⚠️    Alertas             " Click="BtnAlertas_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
 
                 <!-- Botón Salir -->
-                <Button Style="{StaticResource RoundedButton}" Click=" BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
+                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image Source="imagenes/exit_icon.jpg" Width="24" Height="24" Margin="0,0,10,0"/>
                         <TextBlock Text="S A L I R" RenderTransformOrigin="0.561,1.002" Margin="0,5,5,5"/>
@@ -87,35 +88,35 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Nombre 1 -->
+                <!-- Nombre -->
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                     <TextBlock Text="Nombre(s)" Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtNombre1" Margin="5"/>
+                    <TextBox Name="txtNombre" Margin="5"/>
                 </StackPanel>
-
 
                 <!-- Apellido Paterno -->
                 <StackPanel Grid.Column="1" Margin="0,0,10,0">
                     <TextBlock Text="Apellido P." Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtApellidoP" Margin="5"/>
+                    <TextBox Name="txtApellidoPaterno" Margin="5"/>
                 </StackPanel>
 
                 <!-- Apellido Materno -->
                 <StackPanel Grid.Column="2" Margin="0,0,10,0">
                     <TextBlock Text="Apellido M." Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtApellidoM" Margin="5"/>
+                    <TextBox Name="txtApellidoMaterno" Margin="5"/>
                 </StackPanel>
             </Grid>
 
             <Grid Margin="0,5,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="476*"/>
-                    <ColumnDefinition Width="479*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+
                 <!-- CURP -->
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                     <TextBlock Text="CURP" Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtCurp" Margin="5"/>
+                    <TextBox Name="txtCURP" Margin="5"/>
                 </StackPanel>
 
                 <!-- NSS -->
@@ -123,10 +124,7 @@
                     <TextBlock Text="NSS" Foreground="#999" Margin="1"/>
                     <TextBox Name="txtNSS" Margin="5"/>
                 </StackPanel>
-
             </Grid>
-
-
 
             <!-- Sección de Checklist -->
             <Grid Margin="5,10">
@@ -137,122 +135,74 @@
 
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
                     <TextBlock Text="Checklist de Causas:" FontWeight="Bold" Margin="5"/>
-                    <CheckBox Content="Trastornos de la visión" Margin="1"/>
-                    <CheckBox Content="Dolor de cabeza intenso" Margin="1"/>
-                    <CheckBox Content="Parálisis facial" Margin="1"/>
-                    <CheckBox Content="Alteraciones cardiovasculares" Margin="1"/>
+                    <CheckBox x:Name="chkTraumatismoCabeza" Content="Traumatismo en la cabeza" Margin="1"/>
+                    <CheckBox x:Name="chkPresionAlta" Content="Presión alta" Margin="1"/>
+                    <CheckBox x:Name="chkColesterolAlto" Content="Colesterol alto" Margin="1"/>
+                    <CheckBox x:Name="chkDiabetes" Content="Diabetes" Margin="1"/>
+                    <CheckBox x:Name="chkAntecedentesFamiliares" Content="Antecedentes familiares" Margin="1"/>
+                    <CheckBox x:Name="chkEnfermedadCardiovascular" Content="Enfermedad cardiovascular" Margin="1"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="0,0,10,0">
                     <TextBlock Text="Checklist de Emergencia:" FontWeight="Bold" Margin="5"/>
-                    <CheckBox Content="Obstrucción aérea" Margin="3"/>
-                    <CheckBox Content="Pérdida de equilibrio" Margin="3"/>
-                    <CheckBox Content="Debilidad en un lado del cuerpo" Margin="3"/>
+                    <CheckBox x:Name="chkDificultadHablar" Content="Dificultad para hablar" Margin="3"/>
+                    <CheckBox x:Name="chkEntumecimientoCara" Content="Entumecimiento de la cara" Margin="3"/>
+                    <CheckBox x:Name="chkEntumecimientoBrazo" Content="Entumecimiento del brazo" Margin="3"/>
+                    <CheckBox x:Name="chkProblemasVer" Content="Problemas para ver" Margin="3"/>
+                    <CheckBox x:Name="chkDolorCabeza" Content="Dolor de cabeza intenso" Margin="3"/>
+                    <CheckBox x:Name="chkProblemasCaminar" Content="Problemas para caminar" Margin="3"/>
                 </StackPanel>
             </Grid>
 
-            <!-- Sección de Imágenes -->
-            <TextBlock FontSize="16" FontWeight="Bold" Margin="10 0 0 10" Height="86" Width="965"><Run/><LineBreak/><Run/><LineBreak/><Run/><LineBreak/><Run Text="Datos del Archivo/Estudio:"/></TextBlock>
-            <Grid Height="232">
+            <!-- Sección de Datos del Estudio -->
+            <TextBlock FontSize="16" FontWeight="Bold" Margin="10 0 0 0"><Run Text="Datos del Archivo/Estudio:"/></TextBlock>
+
+            <Grid Margin="0,5,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="133*"/>
-                    <ColumnDefinition Width="345*"/>
-                    <ColumnDefinition Width="478*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="150"/>
-                    <RowDefinition Height="150"/>
-                    <RowDefinition Height="150"/>
-                </Grid.RowDefinitions>
-                <StackPanel VerticalAlignment="Top" Height="215" Grid.RowSpan="2" Grid.ColumnSpan="3" Margin="0,10,0,0">
 
-                    <!-- Formulario de Datos del Paciente -->
-
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Nombre 1 -->
-                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                            <TextBlock Foreground="#999" Margin="1"><Run Language="es-es" Text="Fecha del Estudio"/></TextBlock>
-                            <DatePicker Height="24" Width="291" Margin="0,7,0,7"/>
-                        </StackPanel>
-
-
-                        <!-- Apellido Paterno -->
-                        <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                            <TextBlock Foreground="#999" Margin="1"><Run Language="es-es" Text="Sede de Estudio"/></TextBlock>
-                            <TextBox x:Name="txtApellidoP1" Margin="5" Height="24" Width="297"/>
-                        </StackPanel>
-
-                        <!-- Apellido Materno -->
-                        <StackPanel Grid.Column="2" Margin="0,0,10,0">
-                            <TextBlock Foreground="#999" Margin="1"><Run Language="es-es" Text="Prioridad"/></TextBlock>
-                            <TextBox x:Name="txtApellidoM1" Margin="5" Height="25"/>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Margin="0,5,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="476*"/>
-                            <ColumnDefinition Width="479*"/>
-                        </Grid.ColumnDefinitions>
-                        <!-- CURP -->
-                        <StackPanel Grid.Column="0" Margin="0,0,10,0"/>
-
-                        <!-- NSS -->
-                        <StackPanel Grid.Column="1" Margin="0,0,10,0"/>
-
-                    </Grid>
-
-
-
-                    <!-- Sección de Checklist -->
-                    <Grid Margin="5,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-
-                    <!-- Sección de Imágenes -->
-                    <Grid Height="5" RenderTransformOrigin="0.5,0.5">
-                        <Grid.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform ScaleY="-1"/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Grid.RenderTransform>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="150"/>
-                        </Grid.RowDefinitions>
-
-                    </Grid>
-
-                    <!-- Botón para subir imagen -->
-                    <StackPanel Orientation="Vertical" Height="69" Margin="30">
-                        <Button Style="{StaticResource RoundedButton}" Content="Subir Archivo" Height="42" Click="Button_Click_2"/>
-
-                    </StackPanel>
-
+                <!-- Fecha del Estudio -->
+                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                    <TextBlock Text="Fecha del Estudio" Foreground="#999" Margin="1"/>
+                    <DatePicker Name="dpFechaEstudio" Height="24" Width="291" Margin="0,7,0,7"/>
                 </StackPanel>
 
+                <!-- Sede de Estudio -->
+                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                    <TextBlock Text="Sede de Estudio" Foreground="#999" Margin="1"/>
+                    <TextBox Name="txtSedeEstudio" Margin="5" Height="24" Width="297"/>
+                </StackPanel>
 
+                <!-- Prioridad -->
+                <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                    <TextBlock Text="Prioridad" Foreground="#999" Margin="1"/>
+                    <TextBox Name="txtPrioridad" Margin="5" Height="25"/>
+                </StackPanel>
             </Grid>
 
-          
+            <!-- Sección de Archivo -->
+            <StackPanel Orientation="Vertical" Height="136" Margin="1">
+                <TextBlock x:Name="txtArchivoSeleccionado" 
+                           Text="Ningún archivo seleccionado" 
+                           Foreground="#666" 
+                           Margin="0,10,0,10"
+                           FontStyle="Italic"
+                           TextWrapping="Wrap"/>
+
+                <Button Style="{StaticResource RoundedButton}" 
+                        Content="Seleccionar Archivo" 
+                        Height="42" 
+                        Margin="0,0,0,10"
+                        Click="BtnSeleccionarArchivo_Click"/>
+
+                <Button Style="{StaticResource RoundedButton}" 
+                        Content="Subir Archivo" 
+                        Height="42" 
+                        Click="BtnSubirArchivo_Click"/>
+            </StackPanel>
         </StackPanel>
-        
     </Grid>
 </Window>

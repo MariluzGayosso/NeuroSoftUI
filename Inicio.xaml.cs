@@ -6,11 +6,13 @@ using LiveCharts.Wpf;
 using System.Text.Json;
 using NeuroSoft.Helpers;
 using NeuroSoft.Models;
+using System.Windows.Controls;
 
 namespace NeuroSoft
 {
     public partial class Inicio : Window
     {
+
         public ChartValues<int> DatosAlertas { get; set; }
         private UserData CurrentUser { get; set; }
 
@@ -27,10 +29,14 @@ namespace NeuroSoft
             if (Application.Current.Properties.Contains("UserData"))
             {
                 CurrentUser = Application.Current.Properties["UserData"] as UserData;
+                
+
                 // Actualizar UI con datos del usuario
-                // (Nota: Asegúrate de que los controles lblNombreUsuario y lblEmail existen en tu XAML)
-                // lblNombreUsuario.Text = CurrentUser.nombre_completo;
-                // lblEmail.Text = CurrentUser.email;
+                if (CurrentUser != null)
+                {
+                    txtNombreUsuario.Text = CurrentUser.nombre_completo;
+                    txtCorreoUsuario.Text = CurrentUser.email;
+                }
             }
             else
             {
@@ -91,8 +97,8 @@ namespace NeuroSoft
 
         private void BtnResultados_Click(object sender, RoutedEventArgs e)
         {
-            var resultadosWindow = new Resultados();
-            resultadosWindow.Show();
+            //var resultadosWindow = new Resultados();
+            //resultadosWindow.Show();
             this.Close();
         }
 
