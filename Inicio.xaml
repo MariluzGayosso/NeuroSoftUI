@@ -69,8 +69,8 @@
 
                 <!-- Datos del usuario -->
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
-                    <TextBlock Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
+                    <TextBlock x:Name="txtNombreUsuario" Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
+                    <TextBlock x:Name="txtCorreoUsuario"  Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
                 </StackPanel>
 
                 <!-- Icono de notificaciones -->

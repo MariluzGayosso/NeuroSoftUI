@@ -41,8 +41,8 @@ namespace NeuroSoft
         // Evento para el botón "Resultados" en el menú lateral
         private void BtnResultados_Click(object sender, RoutedEventArgs e)
         {
-            Resultados resultadosWindow = new Resultados();
-            resultadosWindow.Show();
+            //Resultados resultadosWindow = new Resultados();
+            //resultadosWindow.Show();
             this.Close();
         }
 
