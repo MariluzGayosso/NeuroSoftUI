@@ -7,6 +7,8 @@ using NeuroSoft.Models;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace NeuroSoft
 {
@@ -14,13 +16,25 @@ namespace NeuroSoft
     {
         public string _rutaArchivoSeleccionado;
         private UserData CurrentUser { get; set; }
+        public string PrioridadSeleccionada { get; set; }
 
         public Subir()
         {
             InitializeComponent();
             dpFechaEstudio.SelectedDate = DateTime.Today;
-            InitializeComponent();
             LoadUserData();
+
+            txtPrioridad.SelectedIndex = 1;
+            PrioridadSeleccionada = "Media";
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (txtPrioridad.SelectedItem != null)
+            {
+                PrioridadSeleccionada = (txtPrioridad.SelectedItem as ComboBoxItem)?.Content.ToString();
+                Debug.WriteLine($"Prioridad seleccionada: {PrioridadSeleccionada}");
+            }
         }
 
         private void LoadUserData()
@@ -28,9 +42,6 @@ namespace NeuroSoft
             if (Application.Current.Properties.Contains("UserData"))
             {
                 CurrentUser = Application.Current.Properties["UserData"] as UserData;
-
-
-                // Actualizar UI con datos del usuario
                 if (CurrentUser != null)
                 {
                     txtNombreUsuario.Text = CurrentUser.nombre_completo;
@@ -47,7 +58,6 @@ namespace NeuroSoft
         {
             try
             {
-                // Validaciones
                 if (string.IsNullOrEmpty(_rutaArchivoSeleccionado))
                 {
                     MessageBox.Show("Seleccione un archivo médico");
@@ -126,7 +136,7 @@ namespace NeuroSoft
                 }
 
                 // 3. Crear estudio
-                using var causasDoc = JsonDocument.Parse(await causasResponse.Content.ReadAsStringAsync()); 
+                using var causasDoc = JsonDocument.Parse(await causasResponse.Content.ReadAsStringAsync());
                 var causasId = causasDoc.RootElement.GetProperty("id").GetInt32();
 
                 using var emergenciaDoc = JsonDocument.Parse(await emergenciaResponse.Content.ReadAsStringAsync());
@@ -140,7 +150,7 @@ namespace NeuroSoft
                     checklist_causas = causasId,
                     checklist_emergencia = emergenciaId,
                     sede = txtSedeEstudio.Text,
-                    prioridad = txtPrioridad.Text
+                    prioridad = PrioridadSeleccionada
                 };
 
                 var estudioResponse = await ApiHelper.PostAsync("estudios/estudios/", estudioData);
@@ -151,11 +161,22 @@ namespace NeuroSoft
                     return;
                 }
 
+                var estudioContent = await estudioResponse.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Estudio creado: {estudioContent}");
+
                 var estudioResult = JsonSerializer.Deserialize<EstudioData>(
-                    await estudioResponse.Content.ReadAsStringAsync(),
+                    estudioContent,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                // 4. Mostrar ventana de resultados
+                // 4. Procesar la imagen con el ID del estudio
+                var procesarResponse = await ProcesarImagen(estudioResult.id);
+                if (!procesarResponse.Success)
+                {
+                    MessageBox.Show($"Error al procesar imagen: {procesarResponse.Error}");
+                    return;
+                }
+
+                // 5. Mostrar ventana de resultados
                 var resultado = new ResultadoData
                 {
                     Id = estudioResult.id,
@@ -163,7 +184,15 @@ namespace NeuroSoft
                     FechaEstudio = dpFechaEstudio.SelectedDate?.ToString("dd/MM/yyyy"),
                     FechaReporte = DateTime.Now.ToString("dd/MM/yyyy"),
                     DatosChecklist = FormatChecklistData(causasData, emergenciaData),
-                    EstadoAnalisis = "Procesando..."
+                    EstadoAnalisis = "Procesando...",
+                    ResultadoPrediccion = procesarResponse.Prediccion,
+                    Precision = $"{procesarResponse.Precision:0.00}%",
+                    Probabilidades = procesarResponse.Probabilidades ?? new Dictionary<string, double>
+                    {
+                        { "Poco probable", 0 },
+                        { "Probable", 0 },
+                        { "Muy probable", 0 }
+                    }
                 };
 
                 var ventanaResultados = new Resultados(resultado);
@@ -174,6 +203,45 @@ namespace NeuroSoft
             {
                 MessageBox.Show($"Error inesperado: {ex.Message}");
                 Debug.WriteLine($"Error: {ex}");
+            }
+        }
+
+        private async Task<ApiResponse> ProcesarImagen(int estudioId)
+        {
+            try
+            {
+                if (estudioId <= 0)
+                {
+                    return new ApiResponse { Success = false, Error = "ID de estudio no válido" };
+                }
+
+                var requestData = new Dictionary<string, object>
+                {
+                    { "estudio_id", estudioId }
+                };
+
+                Debug.WriteLine($"Enviando solicitud para procesar imagen. Estudio ID: {estudioId}");
+
+                var response = await ApiHelper.PostAsync("resultados/procesar-imagen/", requestData);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine($"Error al procesar imagen. Código: {response.StatusCode}. Mensaje: {errorContent}");
+                    return new ApiResponse { Success = false, Error = errorContent };
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Respuesta de procesar-imagen: {responseContent}");
+
+                return JsonSerializer.Deserialize<ApiResponse>(
+                    responseContent,
+                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Excepción al procesar imagen: {ex}");
+                return new ApiResponse { Success = false, Error = ex.Message };
             }
         }
 
@@ -213,7 +281,6 @@ namespace NeuroSoft
             }
         }
 
-        // Métodos del menú lateral
         private void BtnInicio_Click(object sender, RoutedEventArgs e)
         {
             new Inicio().Show();
@@ -234,8 +301,7 @@ namespace NeuroSoft
 
         private void BtnRegistro_Click(object sender, RoutedEventArgs e)
         {
-            var registroWindow = new Registro();
-            registroWindow.Show();
+            new Registro().Show();
             this.Close();
         }
 
@@ -247,10 +313,17 @@ namespace NeuroSoft
                 Application.Current.Shutdown();
             }
         }
+    }
 
-        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
+    public class EstudioData
+    {
+        public int id { get; set; }
+        // Otras propiedades que devuelve el API
+    }
 
-        }
+    public class PacienteData
+    {
+        public int id { get; set; }
+        // Otras propiedades que devuelve el API
     }
 }

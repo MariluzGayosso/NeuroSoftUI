@@ -6,7 +6,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="NeuroSoft - Resultados"
-        Height="680" Width="1300" WindowStartupLocation="CenterScreen">
+        Height="927" Width="1300" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style x:Key="RoundedButton" TargetType="Button">
@@ -105,7 +105,7 @@
                                FontSize="14" Foreground="#34495E" Margin="0,5,0,5"/>
 
                     <TextBlock Text="Precisión:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,30,0,5"/>
-                    <TextBlock Text="{Binding Resultado.TipoACV}" 
+                    <TextBlock Text="{Binding Resultado.Precision}" 
                                FontSize="16" Foreground="#34495E" Margin="0,5,0,30"/>
 
                     <Button Content="Descargar Informe" Style="{StaticResource RoundedButton}" 
@@ -115,7 +115,7 @@
                 <!-- Imagen y gráfico -->
                 <StackPanel Grid.Column="1" Margin="10">
                     <TextBlock Text="Imagen con Fallas Detectadas:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50"/>
-                    <Image x:Name="ImagenResultado" Width="280" Height="160" Stretch="Fill" Margin="0,5,0,10"/>
+                    <Image x:Name="ImagenResultado" Source="{Binding Resultado.ImagenResultado}" Width="280" Height="160" Stretch="Fill" Margin="0,5,0,10"/>
                     
                     <Button Content="👁️ Ver detalles" Background="#F39C12" Foreground="White" FontSize="14" Padding="5" Margin="30,10,30.2,30" Width="224" BorderThickness="0,0,0,0"/>
 
@@ -134,7 +134,7 @@
                         </lvc:CartesianChart.AxisX>
                         <lvc:CartesianChart.AxisY>
                             <lvc:Axis Title="Porcentaje (%)"
-                                     LabelFormatter="{Binding Resultado.LabelFormatter}"
+                                     LabelFormatter="{Binding Formatter}"
                                      MinValue="0" MaxValue="100"/>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>

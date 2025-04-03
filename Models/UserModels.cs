@@ -88,46 +88,15 @@ namespace NeuroSoft.Models
     public class ResultadoData
     {
         public int Id { get; set; }
-        public string NombrePaciente { get; set; } = string.Empty;
-        public string FechaEstudio { get; set; } = string.Empty;
-        public string FechaReporte { get; set; } = string.Empty;
-        public string EstadoAnalisis { get; set; } = "Procesando...";
-        public string ResultadoPrediccion { get; set; } = string.Empty;
-        public string TipoACV { get; set; } = string.Empty;
-        public string DatosChecklist { get; set; } = string.Empty;
-        public string ImagenBase64 { get; set; } = string.Empty;
-        public string ResumenAnalisis { get; set; } = string.Empty;
-
-        private Dictionary<string, double> _probabilidades = new Dictionary<string, double>
-    {
-        { "Poco probable", 0 },
-        { "Probable", 0 },
-        { "Muy probable", 0 }
-    };
-
-        public Dictionary<string, double> Probabilidades
-        {
-            get => _probabilidades;
-            set
-            {
-                _probabilidades = value ?? new Dictionary<string, double>
-            {
-                { "Poco probable", 0 },
-                { "Probable", 0 },
-                { "Muy probable", 0 }
-            };
-            }
-        }
-
-        public double[] DatosGrafica => new[]
-        {
-        Probabilidades["Poco probable"],
-        Probabilidades["Probable"],
-        Probabilidades["Muy probable"]
-    };
-
-        public string[] LabelsGrafica => new[] { "Poco probable", "Probable", "Muy probable" };
-        public Func<double, string> LabelFormatter => value => value.ToString("N0");
+        public string NombrePaciente { get; set; }
+        public string FechaEstudio { get; set; }
+        public string FechaReporte { get; set; }
+        public string DatosChecklist { get; set; }
+        public string EstadoAnalisis { get; set; }
+        public string ResultadoPrediccion { get; set; } // "Muy probable", "Probable", etc.
+        public string Precision { get; set; } // "99.99%"
+        public string ImagenUrl { get; set; }
+        public Dictionary<string, double> Probabilidades { get; set; }
     }
 
     public class ApiResponse
@@ -136,9 +105,18 @@ namespace NeuroSoft.Models
         public int ResultadoId { get; set; }
         public string Prediccion { get; set; }
         public double Precision { get; set; }
-        public string ImagenBase64 { get; set; }
-        public string Resumen { get; set; }
+        public string ImagenUrl { get; set; }
         public Dictionary<string, double> Probabilidades { get; set; }
         public string Error { get; set; }
+    }
+
+    public class PredictionResponse
+    {
+        public string prediccion { get; set; }
+        public double precision { get; set; }
+        public string imagen_bytes { get; set; }
+        public List<double> probabilidades { get; set; }
+        public string resumen { get; set; }
+        public string estado { get; set; }
     }
 }
