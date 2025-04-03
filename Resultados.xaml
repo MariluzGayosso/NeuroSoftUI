@@ -13,7 +13,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#6381A8">
+                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#215476">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -31,19 +31,20 @@
 
     <Grid>
         <!-- Menú lateral -->
-        <DockPanel Background="#6381A8" Width="217" HorizontalAlignment="Left">
+        <DockPanel Background="#215476" Width="217" HorizontalAlignment="Left">
             <StackPanel>
-                <Image Source="imagenes/logo_neuro.jpg" Width="180" Height="53"
+                <Image Source="imagenes/logo_neuro.png" Width="180" Height="53"
                        HorizontalAlignment="Center" Margin="10,20,10,30"/>
 
                 <Button Content="🧠    Inicio                " Click="BtnInicio_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
-                <Button Content="📊    Resultados       " Foreground="White" Background="#4D6380" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content="📊    Resultados       " Foreground="#215476" Background="White" Height="50" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217" Margin="1,1,1,1" />
                 <Button Content="⚠️    Alertas             " Click="BtnAlertas_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
-
-                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
+                <Button Content=" 👤    Registro            " Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                
+                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image Source="imagenes/exit_icon.jpg" Width="24" Height="24" Margin="0,0,10,0"/>
+                        <Image Source="imagenes/exit_icon.png" Width="24" Height="24" Margin="0,0,10,0"/>
                         <TextBlock Text="S A L I R" RenderTransformOrigin="0.561,1.002" Margin="0,5,5,5"/>
                     </StackPanel>
                 </Button>
@@ -51,16 +52,14 @@
         </DockPanel>
 
         <!-- Encabezado con perfil de usuario -->
-        <DockPanel Background="#F5F5F5" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
+        <DockPanel Background="#FFF3F2F2"  Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
                 <Image Source="imagenes/perfil_usuario.png" Width="34" Height="34" Margin="0,0,10,0"
                        ClipToBounds="True" Stretch="Fill"/>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
-                    <TextBlock Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
+                <StackPanel Orientation="Vertical" Margin="0,0,40,0">
+					<TextBlock x:Name="txtNombreUsuario" Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
+					<TextBlock x:Name="txtCorreoUsuario"  Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
                 </StackPanel>
-                <Button Content="🔔" Background="Transparent" BorderThickness="0"
-                        FontSize="18" Foreground="#4D6380" Width="40" Height="34" Margin="10,0,20,0"/>
             </StackPanel>
         </DockPanel>
 
@@ -76,9 +75,9 @@
                 <TextBlock Text="Resultados" FontSize="24" FontWeight="Bold" Foreground="#2C3E50" Margin="10,0,0,0"/>
                 <TextBlock Text="   |   " FontSize="24" Foreground="#BDC3C7"/>
                 <TextBlock Text="{Binding Resultado.IdReporte, StringFormat='ID Reporte: {0}'}" FontSize="16" Foreground="#2C3E50"/>
-                <TextBlock Text="   |   " FontSize="16" Foreground="#BDC3C7"/>
+                <TextBlock Text="   |   " FontSize="24" Foreground="#BDC3C7"/>
                 <TextBlock Text="{Binding Resultado.NombrePaciente, StringFormat='Paciente: {0}'}" FontSize="16" Foreground="#2C3E50"/>
-                <TextBlock Text="   |   " FontSize="16" Foreground="#BDC3C7"/>
+                <TextBlock Text="   |   " FontSize="24" Foreground="#BDC3C7"/>
                 <TextBlock Text="{Binding Resultado.EstadoAnalisis, StringFormat='Estado: {0}'}" FontSize="16" Foreground="#E74C3C"/>
             </StackPanel>
 
@@ -99,28 +98,29 @@
 
                     <TextBlock Text="Datos Recabados:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,30,0,5"/>
                     <TextBlock Text="{Binding Resultado.DatosChecklist}" 
-                               FontSize="16" Foreground="#34495E" TextWrapping="Wrap" Margin="0,5,0,5"/>
+                               FontSize="14" Foreground="#34495E" TextWrapping="Wrap" Margin="0,5,0,5"/>
 
                     <TextBlock Text="Predicción IA:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,30,0,5"/>
                     <TextBlock Text="{Binding Resultado.ResultadoPrediccion}" 
-                               FontSize="16" Foreground="#34495E" Margin="0,5,0,5"/>
+                               FontSize="14" Foreground="#34495E" Margin="0,5,0,5"/>
 
                     <TextBlock Text="Precisión:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,30,0,5"/>
                     <TextBlock Text="{Binding Resultado.TipoACV}" 
-                               FontSize="16" Foreground="#34495E" Margin="0,5,0,5"/>
+                               FontSize="16" Foreground="#34495E" Margin="0,5,0,30"/>
 
                     <Button Content="Descargar Informe" Style="{StaticResource RoundedButton}" 
-                            Margin="0,90,0,0" Click="BtnDescargarInforme_Click"/>
+                            Margin="0,0,0,0" Click="BtnDescargarInforme_Click"/>
                 </StackPanel>
 
                 <!-- Imagen y gráfico -->
                 <StackPanel Grid.Column="1" Margin="10">
                     <TextBlock Text="Imagen con Fallas Detectadas:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50"/>
                     <Image x:Name="ImagenResultado" Width="280" Height="160" Stretch="Fill" Margin="0,5,0,10"/>
-                    <Button Content="Ver detalles" Background="#F39C12" Foreground="White" FontSize="14" Padding="3" Margin="30,10,30,30"/>
+                    
+                    <Button Content="👁️ Ver detalles" Background="#F39C12" Foreground="White" FontSize="14" Padding="5" Margin="30,10,30.2,30" Width="224" BorderThickness="0,0,0,0"/>
 
                     <TextBlock Text="Resumen de Predicción:" FontSize="18" FontWeight="Bold" Foreground="#2C3E50"/>
-                    <lvc:CartesianChart x:Name="GraficoResultados" Height="180" Width="270">
+                    <lvc:CartesianChart x:Name="GraficoResultados" Height="180" Width="270" Margin="5">
                         <lvc:CartesianChart.Series>
                             <lvc:ColumnSeries Title="Predicción IA" 
                                             Values="{Binding Resultado.DatosGrafica}" 

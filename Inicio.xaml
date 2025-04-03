@@ -14,7 +14,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#6381A8">
+                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#215476">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -33,33 +33,33 @@
     <Grid>
 
         <!-- Menú lateral -->
-        <DockPanel Background="#6381A8" Width="217" HorizontalAlignment="Left">
+        <DockPanel Background="#215476" Width="217" HorizontalAlignment="Left">
             <StackPanel>
 
                 <!-- Logo -->
-                <Image Source="imagenes/logo_neuro.jpg" Width="180" Height="53"
+                <Image Source="imagenes/logo_neuro.png" Width="180" Height="53"
                        HorizontalAlignment="Center" Margin="10,20,10,30"/>
 
                 <!-- Botones del menú -->
-                <!-- Botones del menú -->
-                <Button Content="🧠    Inicio                " Foreground="White" Background="#4D6380" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content="🧠    Inicio                " Foreground="#215476" Background="White" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217" FontWeight="Bold" Margin="1,1,1,1"/>
                 <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click"  Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📊    Resultados       " Click="BtnResultados_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="⚠️    Alertas             " Click="BtnAlertas_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content=" 👤    Registro            "  x:Name="BtnRegistro" Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
 
-                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
+                <!-- Botón Salir -->
+                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image Source="imagenes/exit_icon.jpg" Width="24" Height="24" Margin="0,0,10,0"/>
+                        <Image Source="imagenes/exit_icon.png" Width="24" Height="24" Margin="0,0,10,0"/>
                         <TextBlock Text="S A L I R" RenderTransformOrigin="0.561,1.002" Margin="0,5,5,5"/>
                     </StackPanel>
                 </Button>
 
-                <!-- Botón Salir -->
             </StackPanel>
         </DockPanel>
 
         <!-- Encabezado con perfil de usuario -->
-        <DockPanel Background="#F5F5F5" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
+        <DockPanel Background="#FFF3F2F2"  Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
 
                 <!-- Foto de perfil -->
@@ -68,22 +68,19 @@
                        ClipToBounds="True" Stretch="Fill"/>
 
                 <!-- Datos del usuario -->
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" Margin="0,0,40,0">
                     <TextBlock x:Name="txtNombreUsuario" Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
                     <TextBlock x:Name="txtCorreoUsuario"  Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
                 </StackPanel>
-
-                <!-- Icono de notificaciones -->
-                <Button Content="🔔" Background="Transparent" BorderThickness="0"
-                        FontSize="18" Foreground="#4D6380" Width="40" Height="34" Margin="10,0,20,0"/>
+                
             </StackPanel>
         </DockPanel>
 
         <!-- Contenido principal -->
-        <Grid Margin="222,57,0,0" Background="White" Height="658" VerticalAlignment="Top" RenderTransformOrigin="0.564,0.482">
+        <Grid Margin="232,70,14,13" Background="White" Height="658" VerticalAlignment="Top" RenderTransformOrigin="0.564,0.482">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="607*" />
-                <ColumnDefinition Width="371*" />
+                <ColumnDefinition Width="575*" />
+                <ColumnDefinition Width="403*" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -112,13 +109,15 @@
             </StackPanel>
 
             <!-- Gráfica: Código de Emergencias -->
-            <StackPanel Grid.Column="1" Grid.Row="0" Margin="20,20,20,20">
+            <StackPanel Grid.Column="1" Grid.Row="0" Margin="0,20,20,20">
                 <TextBlock Text="Código de Emergencias" FontSize="20" FontWeight="Bold" Foreground="#2C3E50" Height="42"/>
-                <lvc:PieChart Height="210" Width="294">
+                <lvc:PieChart Height="238" Width="344">
                     <lvc:PieChart.Series>
-                        <lvc:PieSeries Title="Código Azul" Values="3" Fill="#3498DB"/>
-                        <lvc:PieSeries Title="Código Rojo" Values="7" Fill="#E74C3C"/>
-                        <lvc:PieSeries Title="Código Amarillo" Values="5" Fill="#F1C40F"/>
+                        <lvc:PieSeries Title="Código Rojo" Values="1" Fill="#F90D0D"/>
+                        <lvc:PieSeries Title="Código Naranja" Values="1.25" Fill="#EE752F"/>
+                        <lvc:PieSeries Title="Código Amarillo" Values="1.5" Fill="#F9AF10"/>
+                        <lvc:PieSeries Title="Código Verde" Values="1.75" Fill="#58A55C"/>
+                        <lvc:PieSeries Title="Código Azul" Values="1" Fill="#5087EC"/>
                     </lvc:PieChart.Series>
                 </lvc:PieChart>
             </StackPanel>

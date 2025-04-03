@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Win32; // Para el diálogo de selección de archivo
+using NeuroSoft.Models;
 
 namespace NeuroSoft
 {
@@ -9,12 +10,33 @@ namespace NeuroSoft
     /// </summary>
     public partial class Alertas : Window
     {
+        private UserData CurrentUser { get; set; }
         public Alertas()
         {
             InitializeComponent();
+            LoadUserData();
         }
 
-        // Eventos del menú lateral
+        private void LoadUserData()
+        {
+            if (Application.Current.Properties.Contains("UserData"))
+            {
+                CurrentUser = Application.Current.Properties["UserData"] as UserData;
+
+
+                // Actualizar UI con datos del usuario
+                if (CurrentUser != null)
+                {
+                    txtNombreUsuario.Text = CurrentUser.nombre_completo;
+                    txtCorreoUsuario.Text = CurrentUser.email;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se encontraron datos de usuario", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+    
 
         // Evento para el botón "Inicio" en el menú lateral
         private void BtnInicio_Click(object sender, RoutedEventArgs e)
@@ -43,6 +65,13 @@ namespace NeuroSoft
         {
             //Resultados resultadosWindow = new Resultados();
             //resultadosWindow.Show();
+            this.Close();
+        }
+
+        private void BtnRegistro_Click(object sender, RoutedEventArgs e)
+        {
+            var registroWindow = new Registro();
+            registroWindow.Show();
             this.Close();
         }
 

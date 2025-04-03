@@ -109,6 +109,14 @@ namespace NeuroSoft
             this.Close();
         }
 
+        private void BtnRegistro_Click(object sender, RoutedEventArgs e)
+        {
+            var registroWindow = new Registro();
+            registroWindow.Show();
+            this.Close();
+        }
+
+
         private void ReturnToLogin()
         {
             var loginWindow = new Login();

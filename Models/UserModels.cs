@@ -17,6 +17,25 @@ namespace NeuroSoft.Models
         public string nombre_completo { get; set; }
         public string email { get; set; }
         public string rol { get; set; }
+
+    }
+
+    public class UsuarioData
+    {
+        public int id { get; set; }
+        public string username { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string email { get; set; }
+        public string telefono { get; set; }
+        public string rol { get; set; }
+        public bool es_activo { get; set; }
+
+        // Propiedad auxiliar para mostrar el nombre completo en el DataGrid
+        public string NombreCompleto => $"{first_name} {last_name}";
+
+        // Propiedad auxiliar para mostrar el correo en el DataGrid
+        public string Correo => email;
     }
 
     public class PacienteData

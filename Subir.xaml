@@ -13,7 +13,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#6381A8">
+                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#215476">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -36,22 +36,23 @@
         </Grid.RowDefinitions>
 
         <!-- Menú lateral -->
-        <DockPanel Background="#6381A8" Width="217" HorizontalAlignment="Left" Grid.RowSpan="2">
+        <DockPanel Background="#215476" Width="217" HorizontalAlignment="Left" Grid.RowSpan="2">
             <StackPanel>
                 <!-- Logo -->
-                <Image Source="imagenes/logo_neuro.jpg" Width="180" Height="53"
+                <Image Source="imagenes/logo_neuro.pNg" Width="180" Height="53"
                        HorizontalAlignment="Center" Margin="10,20,10,30"/>
 
                 <!-- Botones del menú -->
                 <Button Content="🧠    Inicio                " Click="BtnInicio_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
-                <Button Content="📤    Subir Imágenes" Foreground="White" Background="#4D6380" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content="📤    Subir Imágenes" Foreground="#215476" Background="White" Height="50" FontSize="16" FontWeight="Bold"  HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217" Margin="1,1,1,1"/>
                 <Button Content="📊    Resultados       " Click="BtnResultados_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="⚠️    Alertas             " Click="BtnAlertas_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content=" 👤    Registro            " Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
 
                 <!-- Botón Salir -->
-                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
+                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image Source="imagenes/exit_icon.jpg" Width="24" Height="24" Margin="0,0,10,0"/>
+                        <Image Source="imagenes/exit_icon.png" Width="24" Height="24" Margin="0,0,10,0"/>
                         <TextBlock Text="S A L I R" RenderTransformOrigin="0.561,1.002" Margin="0,5,5,5"/>
                     </StackPanel>
                 </Button>
@@ -59,27 +60,25 @@
         </DockPanel>
 
         <!-- Encabezado con perfil de usuario -->
-        <DockPanel Background="#F5F5F5" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
+        <DockPanel Background="#FFF3F2F2" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
                 <!-- Foto de perfil -->
                 <Image Source="imagenes/perfil_usuario.png" Width="34" Height="34" Margin="0,0,10,0"
                        ClipToBounds="True" Stretch="Fill"/>
+
                 <!-- Datos del usuario -->
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
-                    <TextBlock Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
+                <StackPanel Orientation="Vertical" Margin="0,0,40,0">
+					<TextBlock x:Name="txtNombreUsuario" Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
+					<TextBlock x:Name="txtCorreoUsuario"  Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
                 </StackPanel>
-                <!-- Icono de notificaciones -->
-                <Button Content="🔔" Background="Transparent" BorderThickness="0"
-                        FontSize="18" Foreground="#4D6380" Width="40" Height="34" Margin="10,0,20,0"/>
             </StackPanel>
         </DockPanel>
 
         <!-- Contenido principal -->
-        <StackPanel Margin="235,70,10,0" VerticalAlignment="Top" Height="594" Grid.RowSpan="2">
+        <StackPanel Margin="232,70,14,13" VerticalAlignment="Top" Height="594" Grid.RowSpan="2">
 
             <!-- Formulario de Datos del Paciente -->
-            <TextBlock Text="Datos del Paciente:" FontSize="16" FontWeight="Bold" Margin="0,10"/>
+            <TextBlock Text="Datos del Paciente:" FontSize="16" FontWeight="Bold" Margin="0,10" Width="1030"/>
 
             <Grid Margin="0,5,0,0">
                 <Grid.ColumnDefinitions>
@@ -90,8 +89,8 @@
 
                 <!-- Nombre -->
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock Text="Nombre(s)" Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtNombre" Margin="5"/>
+                    <TextBlock Text="Nombre(s)" Foreground="#999" Margin="1" Width="284"/>
+                    <TextBox Name="txtNombre" Margin="5" Width="277"/>
                 </StackPanel>
 
                 <!-- Apellido Paterno -->
@@ -109,14 +108,14 @@
 
             <Grid Margin="0,5,0,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="476*"/>
+                    <ColumnDefinition Width="479*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- CURP -->
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock Text="CURP" Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtCURP" Margin="5"/>
+                    <TextBlock Text="CURP" Foreground="#999" Margin="1"  Width="441"/>
+                    <TextBox Name="txtCURP" Margin="5" Width="446"/>
                 </StackPanel>
 
                 <!-- NSS -->
@@ -127,24 +126,24 @@
             </Grid>
 
             <!-- Sección de Checklist -->
-            <Grid Margin="5,10">
+            <Grid Margin="15,10">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock Text="Checklist de Causas:" FontWeight="Bold" Margin="5"/>
-                    <CheckBox x:Name="chkTraumatismoCabeza" Content="Traumatismo en la cabeza" Margin="1"/>
-                    <CheckBox x:Name="chkPresionAlta" Content="Presión alta" Margin="1"/>
-                    <CheckBox x:Name="chkColesterolAlto" Content="Colesterol alto" Margin="1"/>
-                    <CheckBox x:Name="chkDiabetes" Content="Diabetes" Margin="1"/>
-                    <CheckBox x:Name="chkAntecedentesFamiliares" Content="Antecedentes familiares" Margin="1"/>
-                    <CheckBox x:Name="chkEnfermedadCardiovascular" Content="Enfermedad cardiovascular" Margin="1"/>
+                    <TextBlock Text="Checklist de Causas:" FontWeight="Bold" Margin="6"/>
+                    <CheckBox x:Name="chkTraumatismoCabeza" Content="Traumatismo en la cabeza" Margin="3"/>
+                    <CheckBox x:Name="chkPresionAlta" Content="Presión alta" Margin="3"/>
+                    <CheckBox x:Name="chkColesterolAlto" Content="Colesterol alto" Margin="3"/>
+                    <CheckBox x:Name="chkDiabetes" Content="Diabetes" Margin="3"/>
+                    <CheckBox x:Name="chkAntecedentesFamiliares" Content="Antecedentes familiares" Margin="3"/>
+                    <CheckBox x:Name="chkEnfermedadCardiovascular" Content="Enfermedad cardiovascular" Margin="3"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                    <TextBlock Text="Checklist de Emergencia:" FontWeight="Bold" Margin="5"/>
+                    <TextBlock Text="Checklist de Emergencia:" FontWeight="Bold" Margin="6"/>
                     <CheckBox x:Name="chkDificultadHablar" Content="Dificultad para hablar" Margin="3"/>
                     <CheckBox x:Name="chkEntumecimientoCara" Content="Entumecimiento de la cara" Margin="3"/>
                     <CheckBox x:Name="chkEntumecimientoBrazo" Content="Entumecimiento del brazo" Margin="3"/>
@@ -166,41 +165,46 @@
 
                 <!-- Fecha del Estudio -->
                 <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock Text="Fecha del Estudio" Foreground="#999" Margin="1"/>
-                    <DatePicker Name="dpFechaEstudio" Height="24" Width="291" Margin="0,7,0,7"/>
+                    <TextBlock Text="Fecha del Estudio" Foreground="#999" Margin="1" Width="282"/>
+                    <DatePicker Name="dpFechaEstudio" Height="24" Width="291" Margin="0,6,0,7"/>
                 </StackPanel>
 
                 <!-- Sede de Estudio -->
-                <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                <StackPanel Grid.Column="1" Margin="15,0,351,0" Grid.ColumnSpan="2">
                     <TextBlock Text="Sede de Estudio" Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtSedeEstudio" Margin="5" Height="24" Width="297"/>
+                    <TextBox Name="txtSedeEstudio" Margin="0,5,0,5" Height="24" Width="317"/>
                 </StackPanel>
 
                 <!-- Prioridad -->
-                <StackPanel Grid.Column="2" Margin="0,0,10,0">
-                    <TextBlock Text="Prioridad" Foreground="#999" Margin="1"/>
-                    <TextBox Name="txtPrioridad" Margin="5" Height="25"/>
+                <StackPanel Grid.Column="2" Margin="0,0,10,0" Width="272">
+                    <TextBlock Foreground="#999" Margin="1"><Run Language="es-es" Text="Prioridad"/></TextBlock>
+                    <ComboBox Name="txtPrioridad" Margin="10,6,0,0" Width="260" SelectionChanged="ComboBox_SelectionChanged">
+                        <ComboBoxItem Content="Baja"/>
+                        <ComboBoxItem Content="Media"/>
+                        <ComboBoxItem Content="Alta"/>
+                    </ComboBox>
                 </StackPanel>
             </Grid>
 
             <!-- Sección de Archivo -->
-            <StackPanel Orientation="Vertical" Height="136" Margin="1">
+            <StackPanel Orientation="Vertical" Height="155" Margin="3,3,3,1">
                 <TextBlock x:Name="txtArchivoSeleccionado" 
                            Text="Ningún archivo seleccionado" 
                            Foreground="#666" 
                            Margin="0,10,0,10"
                            FontStyle="Italic"
-                           TextWrapping="Wrap"/>
+                           TextWrapping="Wrap" Width="161"/>
+
+                <StackPanel Orientation="Vertical" Height="45" Margin="5">
+                    <Button Content=" 📁  Seleccionar Archivo" FontSize="13" Height="42" Width="990" Click="BtnSeleccionarArchivo_Click" BorderThickness="1,1,1,1" Background="#FFEAE9E9" />
+                </StackPanel>
+
+
 
                 <Button Style="{StaticResource RoundedButton}" 
-                        Content="Seleccionar Archivo" 
-                        Height="42" 
-                        Margin="0,0,0,10"
-                        Click="BtnSeleccionarArchivo_Click"/>
-
-                <Button Style="{StaticResource RoundedButton}" 
-                        Content="Subir Archivo" 
-                        Height="42" 
+                        Content="Enviar Registro" 
+                        Height="45" 
+                        Margin="12"
                         Click="BtnSubirArchivo_Click"/>
             </StackPanel>
         </StackPanel>

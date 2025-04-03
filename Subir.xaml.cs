@@ -13,11 +13,34 @@ namespace NeuroSoft
     public partial class Subir : Window
     {
         public string _rutaArchivoSeleccionado;
+        private UserData CurrentUser { get; set; }
 
         public Subir()
         {
             InitializeComponent();
             dpFechaEstudio.SelectedDate = DateTime.Today;
+            InitializeComponent();
+            LoadUserData();
+        }
+
+        private void LoadUserData()
+        {
+            if (Application.Current.Properties.Contains("UserData"))
+            {
+                CurrentUser = Application.Current.Properties["UserData"] as UserData;
+
+
+                // Actualizar UI con datos del usuario
+                if (CurrentUser != null)
+                {
+                    txtNombreUsuario.Text = CurrentUser.nombre_completo;
+                    txtCorreoUsuario.Text = CurrentUser.email;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se encontraron datos de usuario", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private async void BtnSubirArchivo_Click(object sender, RoutedEventArgs e)
@@ -209,6 +232,13 @@ namespace NeuroSoft
             this.Close();
         }
 
+        private void BtnRegistro_Click(object sender, RoutedEventArgs e)
+        {
+            var registroWindow = new Registro();
+            registroWindow.Show();
+            this.Close();
+        }
+
         private void BtnSalir_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("¿Estás seguro de que quieres salir?", "Salir",
@@ -216,6 +246,11 @@ namespace NeuroSoft
             {
                 Application.Current.Shutdown();
             }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

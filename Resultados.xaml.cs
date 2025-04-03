@@ -16,11 +16,14 @@ namespace NeuroSoft
 {
     public partial class Resultados : Window
     {
+
         public ResultadoData Resultado { get; set; }
+        private UserData CurrentUser { get; set; }
 
         public Resultados(ResultadoData resultado)
         {
             InitializeComponent();
+            LoadUserData();
             Resultado = resultado ?? new ResultadoData();
 
             // Inicializar propiedades necesarias
@@ -47,6 +50,26 @@ namespace NeuroSoft
                     _ = ProcesarImagenYMostrarResultados();
                 }
             };
+        }
+
+        private void LoadUserData()
+        {
+            if (Application.Current.Properties.Contains("UserData"))
+            {
+                CurrentUser = Application.Current.Properties["UserData"] as UserData;
+
+
+                // Actualizar UI con datos del usuario
+                if (CurrentUser != null)
+                {
+                    txtNombreUsuario.Text = CurrentUser.nombre_completo;
+                    txtCorreoUsuario.Text = CurrentUser.email;
+                }
+            }
+            else
+            {
+                MessageBox.Show("No se encontraron datos de usuario", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private async Task ProcesarImagenYMostrarResultados()
@@ -243,6 +266,13 @@ namespace NeuroSoft
         private void BtnAlertas_Click(object sender, RoutedEventArgs e)
         {
             new Alertas().Show();
+            this.Close();
+        }
+
+        private void BtnRegistro_Click(object sender, RoutedEventArgs e)
+        {
+            var registroWindow = new Registro();
+            registroWindow.Show();
             this.Close();
         }
 

@@ -14,7 +14,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#6381A8">
+                        <Border CornerRadius="20" BorderBrush="White" BorderThickness="2" Background="#215476">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -33,23 +33,24 @@
     <Grid>
 
         <!-- Menú lateral -->
-        <DockPanel Background="#6381A8" Width="217" HorizontalAlignment="Left">
+        <DockPanel Background="#215476" Width="217" HorizontalAlignment="Left">
             <StackPanel >
 
                 <!-- Logo -->
-                <Image Source="imagenes/logo_neuro.jpg" Width="180" Height="53"
+                <Image Source="imagenes/logo_neuro.png" Width="180" Height="53"
                        HorizontalAlignment="Center" Margin="10,20,10,30"/>
 
                 <!-- Botones del menú -->
                 <Button Content="🧠    Inicio                " Click=" BtnInicio_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click"  Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📊    Resultados       " Click="BtnResultados_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
-                <Button Content="⚠️    Alertas             " Foreground="White" Background="#4D6380" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
-
+                <Button Content="⚠️    Alertas             " Foreground="#215476" Background="White" Height="50" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217" Margin="1,1,1,1"/>
+                <Button Content=" 👤    Registro            " Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                
                 <!-- Botón Salir -->
-                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,300,0,0" Width="186">
+                <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image Source="imagenes/exit_icon.jpg" Width="24" Height="24" Margin="0,0,10,0"/>
+                        <Image Source="imagenes/exit_icon.png" Width="24" Height="24" Margin="0,0,10,0"/>
                         <TextBlock Text="S A L I R" RenderTransformOrigin="0.561,1.002" Margin="0,5,5,5"/>
                     </StackPanel>
                 </Button>
@@ -59,7 +60,7 @@
         </DockPanel>
 
         <!-- Encabezado con perfil de usuario -->
-        <DockPanel Background="#F5F5F5" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
+        <DockPanel Background="#FFF3F2F2" Height="57" VerticalAlignment="Top" Margin="217,0,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center">
 
                 <!-- Foto de perfil -->
@@ -68,14 +69,11 @@
                        ClipToBounds="True" Stretch="Fill"/>
 
                 <!-- Datos del usuario -->
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
-                    <TextBlock Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
+                <StackPanel Orientation="Vertical" Margin="0,0,40,0">
+					<TextBlock x:Name="txtNombreUsuario" Text="Nombre del Usuario" FontWeight="Bold" FontSize="14" Foreground="#333"/>
+					<TextBlock x:Name="txtCorreoUsuario"  Text="usuario@correo.com" FontSize="12" Foreground="#666"/>
                 </StackPanel>
 
-                <!-- Icono de notificaciones -->
-                <Button Content="🔔" Background="Transparent" BorderThickness="0"
-                        FontSize="18" Foreground="#4D6380" Width="40" Height="34" Margin="10,0,20,0"/>
             </StackPanel>
         </DockPanel>
 
@@ -95,10 +93,10 @@
                 
 
                 <TextBlock Text=" ID del Archivo:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                <TextBox Width="180" Margin="10,0,30,0"/>
+                <TextBox Width="212" Margin="10,0,30,0"/>
 
                 <!-- BOTÓN DE BÚSQUEDA -->
-                <Button Content="🔍 Buscar" Background="#2980B9" Foreground="White" FontSize="16" Padding="2,4" Width="199" Margin="30,0,5,0" BorderThickness="0,0,0,0"/>
+                <Button Content="🔍 Buscar" Background="#2980B9" Foreground="White" FontSize="16" Padding="2,4" Width="199" Margin="50,0,5,0" BorderThickness="0,0,0,0" Height="30"/>
             </StackPanel>
 
             <!-- FILTROS - SEGUNDA FILA -->
@@ -107,7 +105,7 @@
                 <DatePicker Width="200" Margin="10,0,30,0" Height="28"/>
                 
                 <TextBlock Text="Estatus/Estado:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                <ComboBox Width="180" Margin="10,0,30,0">
+                <ComboBox Width="213" Margin="10,0,30,0">
                     <ComboBoxItem Content="Poco probable"/>
                     <ComboBoxItem Content="Probable"/>
                     <ComboBoxItem Content="Muy probable"/>
@@ -120,7 +118,7 @@
             <StackPanel Orientation="Horizontal" Margin="10,20,20,10" Grid.Row="2">
                 <!-- Encabezado de Historial de Alertas -->
                 <TextBlock Text="Historial de Alertas" FontSize="23" FontWeight="Bold" Foreground="#2C3E50" Margin="20,20,20,10"/>
-                <Button Content="📂 Crear Carpeta/Archivo" Background="#27AE60" Foreground="White" FontSize="16" Padding="8,5"  Width="198" BorderThickness="0,0,0,0" Margin="490,10,0,10"/>
+                <Button Content="📂 Crear Carpeta/Archivo" Background="#27AE60" Foreground="White" FontSize="16" Padding="8,5"  Width="224" BorderThickness="0,0,0,0" Margin="555,10,0,10"/>
             </StackPanel>
 
 
@@ -133,7 +131,7 @@
                         <DataGridTextColumn Header="Paciente" Binding="{Binding NombrePaciente}" Width="*" />
 
                         <!-- Estado con colores -->
-                        <DataGridTemplateColumn Header="Estado">
+                        <DataGridTemplateColumn Header="Estatus">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border Background="{Binding ColorEstado}" Padding="5" CornerRadius="5">
