@@ -17,6 +17,7 @@ namespace NeuroSoft
     {
         public ResultadoData Resultado { get; set; }
         private UserData CurrentUser { get; set; }
+        public string rol { get; set; }
 
         public Resultados(ResultadoData resultado)
         {
@@ -44,6 +45,15 @@ namespace NeuroSoft
                 {
                     txtNombreUsuario.Text = CurrentUser.nombre_completo;
                     txtCorreoUsuario.Text = CurrentUser.email;
+                    // Aquí cambiamos la visibilidad del botón según el rol
+                    if (CurrentUser.rol == "Admin")
+                    {
+                        BtnRegistro.Visibility = Visibility.Visible;  // Mostrar el botón si es Admin
+                    }
+                    else
+                    {
+                        BtnRegistro.Visibility = Visibility.Collapsed;  // Ocultar el botón si no es Admin
+                    }
                 }
             }
         }
@@ -176,19 +186,33 @@ namespace NeuroSoft
                     return;
                 }
 
-                var response = await ApiHelper.GetAsync($"resultados/generar-informe/{Resultado.Id}");
+                // Ajustar el ID restando 21 (por ejemplo, si el ID actual está adelantado en 22)
+                int idCorregido = Resultado.Id - 22;
+
+                // Verifica que el ID corregido sea válido (por ejemplo, no negativo)
+                if (idCorregido < 1)
+                {
+                    MessageBox.Show("ID corregido inválido");
+                    return;
+                }
+
+                // Realizar la llamada a la API con el ID corregido
+                var response = await ApiHelper.GetAsync($"informes/generar-informe/{idCorregido}/");
 
                 if (response?.IsSuccessStatusCode == true)
                 {
+                    // Si la respuesta es exitosa, guardar el PDF
                     await SavePdfReport(response);
                 }
                 else
                 {
+                    // Mostrar un mensaje de error si la llamada a la API falla
                     ShowApiError(response);
                 }
             }
             catch (Exception ex)
             {
+                // Manejar cualquier excepción que ocurra durante el proceso
                 MessageBox.Show($"Error al descargar informe: {ex.Message}");
             }
         }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -24,12 +25,19 @@ namespace NeuroSoft
     public partial class Registro : Window
     {
         private UserData CurrentUser { get; set; }
+        public string rol { get; set; }
+        public string telefono { get; set; }
+        public string username { get; set; }
+
+        // Lista para simular la base de datos
+        private List<UsuarioData> medicosRegistrados = new List<UsuarioData>();
 
         public Registro()
         {
             InitializeComponent();
             LoadUserData();
             LoadMedicos(); // Carga la lista de médicos al iniciar la ventana
+
         }
 
         private void LoadUserData()
@@ -60,9 +68,15 @@ namespace NeuroSoft
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var medicos = JsonSerializer.Deserialize<List<UsuarioData>>(
+                    var todosLosUsuarios = JsonSerializer.Deserialize<List<UsuarioData>>(
                         content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    dgMedicos.ItemsSource = medicos;
+
+                    var medicos = todosLosUsuarios?
+                        .Where(u => u.rol?.Equals("Médico", StringComparison.OrdinalIgnoreCase) == true)
+                        .ToList();
+
+                    medicosRegistrados = medicos ?? new List<UsuarioData>();  // Guardamos la lista de médicos
+                    dgMedicos.ItemsSource = medicosRegistrados;  // Asignamos al DataGrid
                 }
                 else
                 {
@@ -100,6 +114,26 @@ namespace NeuroSoft
                     return;
                 }
 
+                // Verificación de duplicados
+                var medicos = (List<UsuarioData>)dgMedicos.ItemsSource;
+                if (medicos.Any(m => m.Username == txtUsername.Text))
+                {
+                    MessageBox.Show("El Username ya está registrado.");
+                    return;
+                }
+
+                if (medicos.Any(m => m.email.Equals(txtCorreo.Text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    MessageBox.Show("Este correo ya está registrado.", "Duplicado", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                if (medicos.Any(m => m.telefono == txtTelefono.Text))
+                {
+                    MessageBox.Show("Este número de teléfono ya está registrado.", "Duplicado", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 // Crear objeto JSON para el médico
                 var usuarioData = new
                 {
@@ -122,7 +156,6 @@ namespace NeuroSoft
                 {
                     var error = await usuarioResponse.Content.ReadAsStringAsync();
                     MessageBox.Show($"Error al dar de alta al Médico:\n{error}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Debug.WriteLine($"Error al registrar médico: {error}");
                     return;
                 }
 
@@ -143,9 +176,50 @@ namespace NeuroSoft
             catch (Exception ex)
             {
                 MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                Debug.WriteLine($"Error inesperado: {ex}");
             }
         }
+
+        private async void BtnEliminarMedico_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (sender is Button btn && btn.DataContext is UsuarioData medico)
+                {
+                    // Confirmación de eliminación
+                    var confirm = MessageBox.Show($"¿Deseas eliminar al médico {medico.NombreCompleto}?", "Confirmar eliminación", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (confirm == MessageBoxResult.Yes)
+                    {
+                        // Realizar la solicitud DELETE a la API
+                        var response = await ApiHelper.DeleteAsync($"usuarios/{medico.id}/");
+
+                        // Verificar si la solicitud fue exitosa
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // Si la respuesta es exitosa, elimina el médico de la lista local
+                            var medicosRegistrados = (List<UsuarioData>)dgMedicos.ItemsSource;
+                            medicosRegistrados.Remove(medico);
+
+                            // Actualiza el DataGrid
+                            dgMedicos.ItemsSource = null;
+                            dgMedicos.ItemsSource = medicosRegistrados;
+
+                            // Mostrar mensaje de éxito
+                            MessageBox.Show("Médico eliminado.");
+                        }
+                        else
+                        {
+                            // Si la respuesta no es exitosa, mostrar error
+                            MessageBox.Show($"Error al eliminar al médico: {response.ReasonPhrase}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
 
 
         // Métodos del menú lateral
@@ -164,8 +238,7 @@ namespace NeuroSoft
 
         private void BtnResultados_Click(object sender, RoutedEventArgs e)
         {
-            //var resultadosWindow = new Resultados();
-            //resultadosWindow.Show();
+            new Resultados(null).Show();
             this.Close();
         }
 

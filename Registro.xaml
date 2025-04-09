@@ -157,24 +157,35 @@
                     <TextBlock Text="Contraseña" Grid.Row="0" Grid.Column="1" Margin="14,0,8,55" Foreground="Gray" Grid.RowSpan="2"/>
                     <PasswordBox Name="txtPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}" Margin="14,19,56,15"/>
 
-                    <TextBlock Text="Confirmar Contraseña" Grid.Row="0" Grid.Column="1" Margin="350,0,0,55" Foreground="Gray" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-                    <PasswordBox Name="txtConfirmPassword" Grid.Row="1" Grid.Column="2" Style="{StaticResource PasswordBoxStyle}" Margin="10,20,71,16"/>
+                    <TextBlock Text="Confirmar Contraseña" Grid.Row="0" Grid.Column="1" Margin="350,0,8,55" Foreground="Gray" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                    <PasswordBox Name="txtConfirmPassword" Grid.Row="1" Grid.Column="1" Style="{StaticResource PasswordBoxStyle}" Margin="352,19,80,15" Grid.ColumnSpan="2"/>
                 </Grid>
 
                 <Button Content="Registrar Médico" Style="{StaticResource RoundedButton}" Margin="20" Width="276" Click="BtnRegistrarMedico_Click"/>
             </StackPanel>
 
             <!-- Tabla de médicos registrados -->
-            <DataGrid Name="dgMedicos" AutoGenerateColumns="False" Margin="40,350,46,10">
+            <DataGrid Name="dgMedicos" AutoGenerateColumns="False" Margin="32,350,46,0" FontSize="13">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Username" Binding="{Binding Username}"/>
-                    <DataGridTextColumn Header="Nombre Completo" Binding="{Binding NombreCompleto}"/>
-                    <DataGridTextColumn Header="Correo" Binding="{Binding Correo}"/>
-                    <DataGridTextColumn Header="Teléfono" Binding="{Binding Telefono}"/>
-                    <DataGridTemplateColumn Header="Acciones">
+                    <DataGridTextColumn Header="UserName" Binding="{Binding UserNameUser}" Width="*"/>
+                    <DataGridTextColumn Header="Nombre Completo" Binding="{Binding NombreCompleto}" Width="*"/>
+                    <DataGridTextColumn Header="Correo" Binding="{Binding Correo}" Width="*" />
+                    <DataGridTextColumn Header="Teléfono" Binding="{Binding TelefonoUser}" Width="*"  />
+                    <DataGridTemplateColumn Header="Acciones" Width="110">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="🗑Eliminar" Background="Red" Foreground="White"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content=" 🗑 Eliminar " Background="Red" Foreground="White" Padding="20" Margin="2" Width="90" FontSize="14" Click="BtnEliminarMedico_Click">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="3">
+                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+
+                                </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -20,8 +20,19 @@ namespace NeuroSoft.Models
 
     }
 
+    public class Medico
+    {
+        public string Username { get; set; }
+        public string NombreCompleto { get; set; }
+        public string Correo { get; set; }
+        public string Telefono { get; set; }
+    }
+
+
     public class UsuarioData
     {
+        internal string Username;
+
         public int id { get; set; }
         public string username { get; set; }
         public string first_name { get; set; }
@@ -36,6 +47,8 @@ namespace NeuroSoft.Models
 
         // Propiedad auxiliar para mostrar el correo en el DataGrid
         public string Correo => email;
+        public string TelefonoUser => telefono;
+        public string UserNameUser => username;
     }
 
     public class PacienteData
@@ -98,6 +111,32 @@ namespace NeuroSoft.Models
         public string ImagenUrl { get; set; }
         public Dictionary<string, double> Probabilidades { get; set; }
     }
+
+    public class Alerta
+    {
+        public string FechaReporte { get; set; }
+        public string IDArchivo { get; set; }
+        public string NombrePaciente { get; set; }
+        public string Prediccion { get; set; }
+        public string ColorPrediccion { get; set; } // Para mostrar el color del estado
+    }
+
+    public class ResultadoAlertaApi
+    {
+        public int id { get; set; }
+        public string fecha_resultado { get; set; }
+        public string prediccion_ia { get; set; }
+        public int paciente { get; set; }
+    }
+
+    public class PacienteApi
+    {
+        public int id { get; set; }
+        public string nombre { get; set; }
+        public string apellido_paterno { get; set; }
+        public string apellido_materno { get; set; }
+    }
+
 
     public class ApiResponse
     {

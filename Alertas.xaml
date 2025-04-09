@@ -28,6 +28,7 @@
             <Setter Property="Width" Value="200"/>
             <Setter Property="Height" Value="50"/>
         </Style>
+
     </Window.Resources>
 
     <Grid>
@@ -45,7 +46,7 @@
                 <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click"  Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📊    Resultados       " Click="BtnResultados_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="⚠️    Alertas             " Foreground="#215476" Background="White" Height="50" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217" Margin="1,1,1,1"/>
-                <Button Content=" 👤    Registro            " Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content=" 👤    Registro            " x:Name="BtnRegistro" Click="BtnRegistro_Click" Visibility="Collapsed" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
                 
                 <!-- Botón Salir -->
                 <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
@@ -88,24 +89,24 @@
 
             <!-- FILTROS - PRIMERA FILA -->
             <StackPanel Orientation="Horizontal" Margin="20,20,20,5" Grid.Row="0">
-                <TextBlock Text="Nombre Paciente:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                <TextBox Width="200" Margin="10,0,30,0" />
+                <TextBlock  Text="Nombre Paciente:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                <TextBox x:Name="txtNombrePaciente" Width="200" Margin="10,0,30,0" />
                 
 
                 <TextBlock Text=" ID del Archivo:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                <TextBox Width="212" Margin="10,0,30,0"/>
+                <TextBox  Name="txtIDArchivo" Width="212" Margin="10,0,30,0"/>
 
                 <!-- BOTÓN DE BÚSQUEDA -->
-                <Button Content="🔍 Buscar" Background="#2980B9" Foreground="White" FontSize="16" Padding="2,4" Width="199" Margin="50,0,5,0" BorderThickness="0,0,0,0" Height="30"/>
+                <Button Content="🔍 Buscar" Click="BtnBuscar_Click" Background="#2980B9" Foreground="White" FontSize="17" Padding="2,4" Width="199" Margin="50,0,5,0" BorderThickness="0,0,0,0" Height="30"/>
             </StackPanel>
 
             <!-- FILTROS - SEGUNDA FILA -->
             <StackPanel Orientation="Horizontal" Margin="20,5,20,10" Grid.Row="1">
                 <TextBlock Text="Fecha de Reporte:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                <DatePicker Width="200" Margin="10,0,30,0" Height="28"/>
+                <DatePicker  Name="dpFechaReporte" Width="200" Margin="10,0,30,0" Height="28"/>
                 
-                <TextBlock Text="Estatus/Estado:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
-                <ComboBox Width="213" Margin="10,0,30,0">
+                <TextBlock Text=" Predicción  IA:" FontSize="16" FontWeight="Bold" Foreground="#2C3E50"/>
+                <ComboBox Name="cmbPrediccionIA" Width="213" Margin="10,0,30,0">
                     <ComboBoxItem Content="Poco probable"/>
                     <ComboBoxItem Content="Probable"/>
                     <ComboBoxItem Content="Muy probable"/>
@@ -118,39 +119,55 @@
             <StackPanel Orientation="Horizontal" Margin="10,20,20,10" Grid.Row="2">
                 <!-- Encabezado de Historial de Alertas -->
                 <TextBlock Text="Historial de Alertas" FontSize="23" FontWeight="Bold" Foreground="#2C3E50" Margin="20,20,20,10"/>
-                <Button Content="📂 Crear Carpeta/Archivo" Background="#27AE60" Foreground="White" FontSize="16" Padding="8,5"  Width="224" BorderThickness="0,0,0,0" Margin="555,10,0,10"/>
             </StackPanel>
 
 
             <!-- TABLA DE ALERTAS -->
             <Grid Grid.Row="3" Margin="20,5,20,5">
-                <DataGrid ItemsSource="{Binding ListaAlertas}" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeight="40" Margin="0,0,0,42">
+                <DataGrid x:Name="DataGridAlertas" Grid.Row="3" AutoGenerateColumns="False" HeadersVisibility="Column" RowHeight="40" Margin="0,0,0,42">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Fecha Reporte" Binding="{Binding FechaReporte}" Width="*" />
-                        <DataGridTextColumn Header="ID Archivo" Binding="{Binding IDArchivo}" Width="*" />
+                        <DataGridTextColumn Header="ID Archivo" Binding="{Binding IDArchivo}" Width="200" />
                         <DataGridTextColumn Header="Paciente" Binding="{Binding NombrePaciente}" Width="*" />
+ 
 
                         <!-- Estado con colores -->
-                        <DataGridTemplateColumn Header="Estatus">
+                        <DataGridTemplateColumn Header="Predicción" Width="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Border Background="{Binding ColorEstado}" Padding="5" CornerRadius="5">
-                                        <TextBlock Text="{Binding Estado}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    <Border Background="{Binding ColorPrediccion}" Padding="2" CornerRadius="5" Margin="3">
+                                        <TextBlock Text="{Binding Prediccion}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
                                     </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
                         <!-- BOTONES DE OPCIONES -->
-                        <DataGridTemplateColumn Header="Opciones">
+                        <DataGridTemplateColumn Header="Opciones" Width="200">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                         <!-- BOTÓN VISUALIZAR -->
-                                        <Button Content="👁 Visualizar" Background="#3498DB" Foreground="White" Padding="5" Margin="5,0,0,0" Command="{Binding ComandoVisualizar}"/>
+                                        <Button Content=" 👁 Visualizar  " Background="DarkBlue" Foreground="White" Padding="2" Margin="1" Command="{Binding ComandoVisualizar}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="5">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
 
                                         <!-- BOTÓN ELIMINAR -->
-                                        <Button Content="🗑 Eliminar" Background="#E74C3C" Foreground="White" Padding="5" Margin="5,0,0,0" Command="{Binding ComandoEliminar}"/>
+                                        <Button Content=" 🗑 Eliminar  " Click="BtnEliminarAlerta_Click" Background="Red" Foreground="White" Padding="2" Margin="1" Command="{Binding ComandoEliminar}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="5">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -45,7 +45,7 @@
                 <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click"  Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📊    Resultados       " Click="BtnResultados_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left"  BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="⚠️    Alertas             " Click="BtnAlertas_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
-                <Button Content=" 👤    Registro            "  x:Name="BtnRegistro" Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content=" 👤    Registro            "  x:Name="BtnRegistro" Visibility="Collapsed" Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
 
                 <!-- Botón Salir -->
                 <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
@@ -91,7 +91,7 @@
             <!-- Gráfica: Vista General de Alertas -->
             <StackPanel Grid.Column="0" Grid.Row="0" Margin="20,20,20,20">
                 <TextBlock Text="Vista General de Alertas" FontSize="20" FontWeight="Bold" Foreground="#2C3E50"/>
-                <lvc:CartesianChart Height="229" RenderTransformOrigin="0.5,0.5" Width="586">
+                <lvc:CartesianChart Height="229" RenderTransformOrigin="0.5,0.5" Width="586" x:Name="AlertasChart">
                     <lvc:CartesianChart.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -100,11 +100,6 @@
                             <TranslateTransform Y="-0.664"/>
                         </TransformGroup>
                     </lvc:CartesianChart.RenderTransform>
-                    <lvc:CartesianChart.Series>
-                        <lvc:ColumnSeries Title="Alertas"
-                                          Values="{Binding DatosAlertas}"
-                                          Fill="#FF5733"/>
-                    </lvc:CartesianChart.Series>
                 </lvc:CartesianChart>
             </StackPanel>
 
@@ -125,12 +120,22 @@
             <!-- Tabla: Historial de Alertas -->
             <StackPanel Grid.ColumnSpan="2" Margin="20,292,20,98" Grid.RowSpan="2">
                 <TextBlock Text="Historial de Alertas" FontSize="20" FontWeight="Bold" Foreground="#2C3E50" Margin="10" Height="35"/>
-                <DataGrid AutoGenerateColumns="False" Height="212">
+                <DataGrid  x:Name="DataGridAlertas" AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Fecha" Binding="{Binding Fecha}" Width="150"/>
-                        <DataGridTextColumn Header="Tipo de Alerta" Binding="{Binding Tipo}" Width="200"/>
-                        <DataGridTextColumn Header="Nivel de Prioridad" Binding="{Binding Prioridad}" Width="150"/>
-                        <DataGridTextColumn Header="Estado" Binding="{Binding Estado}" Width="120"/>
+                        <DataGridTextColumn Header="Fecha Reporte" Binding="{Binding FechaReporte}" Width="*"/>
+                        <DataGridTextColumn Header="ID Archivo" Binding="{Binding IDArchivo}" Width="200"/>
+                        <DataGridTextColumn Header="Paciente" Binding="{Binding NombrePaciente}" Width="*"/>
+
+                        <!-- Estado con colores -->
+                        <DataGridTemplateColumn Header="Predicción" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="{Binding ColorPrediccion}" Padding="2" CornerRadius="5" Margin="3">
+                                        <TextBlock Text="{Binding Prediccion}" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>

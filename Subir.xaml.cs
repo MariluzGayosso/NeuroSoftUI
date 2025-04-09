@@ -17,6 +17,7 @@ namespace NeuroSoft
         public string _rutaArchivoSeleccionado;
         private UserData CurrentUser { get; set; }
         public string PrioridadSeleccionada { get; set; }
+        public string rol { get; set; }
 
         public Subir()
         {
@@ -46,6 +47,15 @@ namespace NeuroSoft
                 {
                     txtNombreUsuario.Text = CurrentUser.nombre_completo;
                     txtCorreoUsuario.Text = CurrentUser.email;
+                    // Aquí cambiamos la visibilidad del botón según el rol
+                    if (CurrentUser.rol == "Admin")
+                    {
+                        BtnRegistro.Visibility = Visibility.Visible;  // Mostrar el botón si es Admin
+                    }
+                    else
+                    {
+                        BtnRegistro.Visibility = Visibility.Collapsed;  // Ocultar el botón si no es Admin
+                    }
                 }
             }
             else

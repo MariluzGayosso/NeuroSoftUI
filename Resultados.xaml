@@ -40,7 +40,7 @@
                 <Button Content="📤    Subir Imágenes" Click="BtnSubirImagenes_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
                 <Button Content="📊    Resultados       " Foreground="#215476" Background="White" Height="50" FontSize="16" FontWeight="Bold" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217" Margin="1,1,1,1" />
                 <Button Content="⚠️    Alertas             " Click="BtnAlertas_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
-                <Button Content=" 👤    Registro            " Click="BtnRegistro_Click" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
+                <Button Content=" 👤    Registro            " x:Name="BtnRegistro" Click="BtnRegistro_Click" Visibility="Collapsed" Foreground="White" Background="Transparent" Height="50" FontSize="16" HorizontalAlignment="Left" BorderThickness="0,0,0,0" Width="217"/>
                 
                 <Button Style="{StaticResource RoundedButton}" Click="BtnSalir_Click" Height="35" Margin="0,240,0,0" Width="186">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -64,7 +64,7 @@
         </DockPanel>
 
         <!-- Contenido principal -->
-        <Grid Margin="222,57,0,0" Background="White" Height="607" VerticalAlignment="Top">
+        <Grid Margin="222,57,0,0" Background="White" Height="766" VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
