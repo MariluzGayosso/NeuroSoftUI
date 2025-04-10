@@ -110,6 +110,9 @@ namespace NeuroSoft.Models
         public string Precision { get; set; } // "99.99%"
         public string ImagenUrl { get; set; }
         public Dictionary<string, double> Probabilidades { get; set; }
+       
+        public double[] DatosGrafica { get; set; }
+        public string[] LabelsGrafica { get; set; }
     }
 
     public class Alerta

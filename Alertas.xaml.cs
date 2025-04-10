@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.IO;
 
 namespace NeuroSoft
 {
@@ -201,6 +202,66 @@ namespace NeuroSoft
             }
         }
 
+        private async void BtnDescargarInforme_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (DataGridAlertas.SelectedItem is Alerta alertaSeleccionada)
+                {
+                    // Convertir el IDArchivo a número (asumiendo que es un string que representa un número)
+                    if (int.TryParse(alertaSeleccionada.IDArchivo, out int idArchivo))
+                    {
+                        // Realizar la llamada a la API con el ID
+                        var response = await ApiHelper.GetAsync($"informes/generar-informe/{idArchivo}/");
+
+                        if (response?.IsSuccessStatusCode == true)
+                        {
+                            // Si la respuesta es exitosa, guardar el PDF
+                            await SavePdfReport(response, alertaSeleccionada);
+                        }
+                        else
+                        {
+                            // Mostrar un mensaje de error si la llamada a la API falla
+                            ShowApiError(response);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("El ID del archivo no es válido.");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, selecciona una alerta para descargar su informe.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al descargar informe: {ex.Message}");
+            }
+        }
+
+        private async Task SavePdfReport(HttpResponseMessage response, Alerta alerta)
+        {
+            var saveDialog = new SaveFileDialog
+            {
+                Filter = "PDF files (*.pdf)|*.pdf",
+                FileName = $"Reporte_{alerta.NombrePaciente}_{DateTime.Now:yyyyMMdd}.pdf"
+            };
+
+            if (saveDialog.ShowDialog() == true)
+            {
+                var pdfBytes = await response.Content.ReadAsByteArrayAsync();
+                await File.WriteAllBytesAsync(saveDialog.FileName, pdfBytes);
+                MessageBox.Show("Informe descargado correctamente");
+            }
+        }
+
+        private async void ShowApiError(HttpResponseMessage response)
+        {
+            var error = response != null ? await response.Content.ReadAsStringAsync() : "Error desconocido";
+            MessageBox.Show($"Error al descargar informe: {error}");
+        }
 
 
         // Evento para el botón "Inicio" en el menú lateral

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,6 +12,7 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using NeuroSoft.Helpers;
 using NeuroSoft.Models;
+using System.ComponentModel;
 
 namespace NeuroSoft
 {
@@ -30,7 +33,9 @@ namespace NeuroSoft
                     { "Poco probable", 0 },
                     { "Probable", 0 },
                     { "Muy probable", 0 }
-                }
+                },
+                DatosGrafica = new double[] { 0, 0, 0 },
+                LabelsGrafica = new string[] { "Poco probable", "Probable", "Muy probable" }
             };
             DataContext = this;
             this.Loaded += async (sender, e) => await InitializeAsync();
@@ -122,15 +127,20 @@ namespace NeuroSoft
             {
                 Resultado.ResultadoPrediccion = procesarResponse.Prediccion;
                 Resultado.Precision = $"{procesarResponse.Precision:0.00}%";
-                Resultado.Probabilidades = procesarResponse.Probabilidades ?? Resultado.Probabilidades;
+                if (procesarResponse.Probabilidades != null)
+                {
+                    Resultado.Probabilidades = procesarResponse.Probabilidades;
+                }
             }
 
             if (consultaResponse != null)
             {
                 Resultado.ResultadoPrediccion = consultaResponse.Prediccion ?? Resultado.ResultadoPrediccion;
-                Resultado.Precision = consultaResponse.Precision > 0 ?
-                    $"{consultaResponse.Precision:0.00}%" : Resultado.Precision;
-                Resultado.Probabilidades = consultaResponse.Probabilidades ?? Resultado.Probabilidades;
+                Resultado.Precision = consultaResponse.Precision > 0 ? $"{consultaResponse.Precision:0.00}%" : Resultado.Precision;
+                if (consultaResponse.Probabilidades != null)
+                {
+                    Resultado.Probabilidades = consultaResponse.Probabilidades;
+                }
             }
 
             Resultado.EstadoAnalisis = "Finalizado";
@@ -222,7 +232,8 @@ namespace NeuroSoft
             var saveDialog = new SaveFileDialog
             {
                 Filter = "PDF files (*.pdf)|*.pdf",
-                FileName = $"Reporte_{Resultado.Id}_{DateTime.Now:yyyyMMdd}.pdf"
+                FileName = $"Reporte_{SanitizeFileName(Resultado.NombrePaciente)}_{Resultado.FechaEstudio.Replace("/", "-")}.pdf"
+
             };
 
             if (saveDialog.ShowDialog() == true)
@@ -233,6 +244,16 @@ namespace NeuroSoft
             }
         }
 
+        private string SanitizeFileName(string input)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                input = input.Replace(c, '_');
+            }
+            return input;
+        }
+
+
         private async void ShowApiError(HttpResponseMessage response)
         {
             var error = response != null ? await response.Content.ReadAsStringAsync() : "Error desconocido";
@@ -240,7 +261,7 @@ namespace NeuroSoft
         }
     }
 
-    public class ResultadoData
+    public class ResultadoData : INotifyPropertyChanged
     {
         public int Id { get; set; }
         public string NombrePaciente { get; set; }
@@ -250,7 +271,56 @@ namespace NeuroSoft
         public string EstadoAnalisis { get; set; }
         public string ResultadoPrediccion { get; set; }
         public string Precision { get; set; }
-        public Dictionary<string, double> Probabilidades { get; set; }
+
+        private Dictionary<string, double> probabilidades;
+        public Dictionary<string, double> Probabilidades
+        {
+            get { return probabilidades; }
+            set
+            {
+                probabilidades = value;
+                OnPropertyChanged(nameof(Probabilidades));
+                ActualizarDatosGrafica();
+            }
+        }
+
+        private double[] datosGrafica;
+        public double[] DatosGrafica
+        {
+            get { return datosGrafica; }
+            set
+            {
+                datosGrafica = value;
+                OnPropertyChanged(nameof(DatosGrafica));
+            }
+        }
+
+        private string[] labelsGrafica;
+        public string[] LabelsGrafica
+        {
+            get { return labelsGrafica; }
+            set
+            {
+                labelsGrafica = value;
+                OnPropertyChanged(nameof(LabelsGrafica));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ActualizarDatosGrafica()
+        {
+            if (Probabilidades != null)
+            {
+                DatosGrafica = Probabilidades.Values.ToArray();
+                LabelsGrafica = Probabilidades.Keys.ToArray();
+            }
+        }
     }
 
     public class ApiResponse

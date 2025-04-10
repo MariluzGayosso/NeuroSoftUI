@@ -147,8 +147,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                        <!-- BOTÓN VISUALIZAR -->
-                                        <Button Content=" 👁 Visualizar  " Background="DarkBlue" Foreground="White" Padding="2" Margin="1" Command="{Binding ComandoVisualizar}">
+                                        <!-- BOTÓN DESCARGAR -->
+                                        <Button x:Name="BtnDescargarInforme" Content=" Descargar  " Background="DarkBlue" Foreground="White" Padding="2" Margin="1" Click="BtnDescargarInforme_Click">
                                             <Button.Template>
                                                 <ControlTemplate TargetType="Button">
                                                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" CornerRadius="5">
